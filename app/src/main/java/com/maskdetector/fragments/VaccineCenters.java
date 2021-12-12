@@ -3,6 +3,8 @@ package com.maskdetector.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -57,6 +59,9 @@ public class VaccineCenters extends Fragment {
             @Override
             public void onItemClicked(City city) {
                 Log.d("clicked", "You clicked" + city.getName());
+                MapsFragment mapFragment = new MapsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fl_fragment, mapFragment).commit();
             }
         });
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
