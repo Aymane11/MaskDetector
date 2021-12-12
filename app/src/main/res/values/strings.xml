@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mask Detector</string>
+    <string name="mask_check">Mask Check</string>
+    <string name="vaccine_centers">Vaccine Centers</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="city">City</string>
+</resources>
