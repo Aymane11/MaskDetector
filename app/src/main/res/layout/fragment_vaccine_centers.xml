@@ -20,12 +20,12 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/top_toolbar"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                style="@style/Widget.MaterialComponents.Toolbar.Surface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/top_menu"
-                app:title="@string/app_name"
-                app:titleTextColor="@color/white" />
+                app:title=""
+                app:titleTextColor="@color/purple_700"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
