@@ -1,10 +1,12 @@
 package com.maskdetector.database.models;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 public class City {
     private Integer id;
-    private String name;
+    private String city_name;
     private List<Center> centers;
 
     public Integer getId() {
@@ -15,12 +17,12 @@ public class City {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCity_name() {
+        return city_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCity_name(String city_name) {
+        this.city_name = city_name;
     }
 
     public List<Center> getCenters() {
@@ -33,6 +35,6 @@ public class City {
 
     @Override
     public String toString() {
-        return name;
+        return city_name;
     }
 }

@@ -1,20 +1,17 @@
 package com.maskdetector.database.models;
 
 public class Center {
-    private Integer id;
-    private String title;
+    private String name;
     private String latitude;
     private String longitude;
     private String address;
-    private String commune;
-    private City city;
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLatitude() {
@@ -41,40 +38,13 @@ public class Center {
         this.address = address;
     }
 
-    public String getCommune() {
-        return commune;
-    }
-
-    public void setCommune(String commune) {
-        this.commune = commune;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
     @Override
     public String toString() {
         return "Center{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
+                "name='" + name + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", address='" + address + '\'' +
-                ", commune='" + commune + '\'' +
-                ", city=" + city +
                 '}';
     }
 }

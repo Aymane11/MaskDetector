@@ -54,7 +54,7 @@ public class MainAdapter extends ListAdapter<City, MainAdapter.MainViewHolder> {
     public void filter(String query) {
         List<City> filteredList = new ArrayList<>();
         for (City city : originalList) {
-            if (city.getName().toLowerCase().contains(query.toLowerCase())) {
+            if (city.getCity_name().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(city);
             }
         }
@@ -76,7 +76,7 @@ public class MainAdapter extends ListAdapter<City, MainAdapter.MainViewHolder> {
         void bindTo(City city) {
             this.city = city;
 
-            textTitle.setText(city.getName());
+            textTitle.setText(city.getCity_name());
             textCount.setText("0");
         }
     }

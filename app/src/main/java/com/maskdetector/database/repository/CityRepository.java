@@ -10,7 +10,7 @@ import com.maskdetector.utils.Utils;
 import java.util.List;
 
 public class CityRepository {
-    public static final String DATABASE_CITIES_JSON = "database/cities.json";
+    public static final String DATABASE_CITIES_JSON = "database/centersdata.json";
 
     private final Gson gson = new Gson();
     private final Context context;

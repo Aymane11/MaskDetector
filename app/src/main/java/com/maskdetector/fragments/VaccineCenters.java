@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.maskdetector.R;
 import com.maskdetector.adapter.MainAdapter;
@@ -58,8 +56,9 @@ public class VaccineCenters extends Fragment {
         adapter = new MainAdapter(new MainAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(City city) {
-                Log.d("clicked", "You clicked" + city.getName());
+                Log.d("clicked", "You clicked" + city.getCity_name());
                 MapsFragment mapFragment = new MapsFragment();
+                mapFragment.setCenters(city.getCenters());
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.fl_fragment, mapFragment).commit();
             }

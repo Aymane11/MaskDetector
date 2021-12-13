@@ -16,25 +16,40 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.maskdetector.R;
+import com.maskdetector.database.models.Center;
+
+import java.util.List;
 
 public class MapsFragment extends Fragment {
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private List<Center> centers;
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+    public void setCenters(List<Center> centers) {
+        this.centers = centers;
+    }
+
+    public LatLng getMapCenter() {
+        double sumLat = 0, sumLon = 0;
+        for (Center center : centers) {
+            sumLon += Double.parseDouble(center.getLongitude());
+            sumLat += Double.parseDouble(center.getLatitude());
+        }
+        double centerLat = sumLat / centers.size();
+        double centerLon = sumLon / centers.size();
+        return new LatLng(centerLat, centerLon);
+    }
+
+    private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            for (Center center : centers) {
+                double lat = Double.parseDouble(center.getLatitude());
+                double lon = Double.parseDouble(center.getLongitude());
+                LatLng centerLatLng = new LatLng(lat, lon);
+                googleMap.addMarker(new MarkerOptions().position(centerLatLng).title(center.getName() + "(" + center.getAddress() + ")"));
+            }
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(getMapCenter()));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(10));
         }
     };
 
