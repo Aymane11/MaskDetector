@@ -56,7 +56,7 @@ public class VaccineCenters extends Fragment {
         adapter = new MainAdapter(new MainAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(City city) {
-                Log.d("clicked", "You clicked" + city.getCity_name());
+                Log.d("clicked", "You clicked " + city.getCity_name());
                 MapsFragment mapFragment = new MapsFragment();
                 mapFragment.setCenters(city.getCenters());
                 FragmentManager fragmentManager = getFragmentManager();

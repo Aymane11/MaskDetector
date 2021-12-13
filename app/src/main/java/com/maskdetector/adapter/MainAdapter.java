@@ -73,11 +73,12 @@ public class MainAdapter extends ListAdapter<City, MainAdapter.MainViewHolder> {
             textCount = itemView.findViewById(R.id.textCount);
         }
 
+        @SuppressLint("SetTextI18n")
         void bindTo(City city) {
             this.city = city;
 
             textTitle.setText(city.getCity_name());
-            textCount.setText("0");
+            textCount.setText(city.getCenters().size()+"");
         }
     }
 
