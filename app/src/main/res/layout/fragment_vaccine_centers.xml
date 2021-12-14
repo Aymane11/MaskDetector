@@ -20,12 +20,11 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/top_toolbar"
-                style="@style/Widget.MaterialComponents.Toolbar.Surface"
+                style="@style/Theme.MaskDetector.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/top_menu"
-                app:title=""
-                app:titleTextColor="@color/purple_700"/>
+                app:title="@string/vaccine_centers_title"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

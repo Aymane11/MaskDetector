@@ -38,7 +38,6 @@ public class VaccineCenters extends Fragment {
         cityRepository  = new CityRepository(root.getContext());
 
         MaterialToolbar toolbar = root.findViewById(R.id.top_toolbar);
-        toolbar.setTitle(null);
 
         MenuItem searchItem = toolbar.getMenu().findItem(R.id.search_cities);
         SearchView searchView = (SearchView) searchItem.getActionView();
