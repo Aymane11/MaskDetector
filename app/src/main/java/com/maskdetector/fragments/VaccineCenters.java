@@ -61,7 +61,11 @@ public class VaccineCenters extends Fragment {
                 MapsFragment mapFragment = new MapsFragment();
                 mapFragment.setCenters(city.getCenters());
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fl_fragment, mapFragment).commit();
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fl_fragment, mapFragment)
+                        .addToBackStack("VaccineCenters")
+                        .commit();
             }
         });
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);

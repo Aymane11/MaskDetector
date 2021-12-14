@@ -70,4 +70,9 @@ public class MapsFragment extends Fragment {
             mapFragment.getMapAsync(callback);
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 }
