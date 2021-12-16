@@ -124,12 +124,12 @@ public class MaskDetector extends Fragment {
         FaceMaskDetection.Outputs result = faceMaskDetection.process(tfImage);
         List<Category> output = result.getProbabilityAsCategoryList();
 
-        new Handler(Looper.getMainLooper()).post(() -> getViewLifecycleOwner().getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
+        new Handler(Looper.getMainLooper()).post(() -> getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
             int supIndex = output.get(0).getScore() > output.get(1).getScore() ? 0 : 1;
 
             boolean isMaskOn = output.get(supIndex)
-                .getLabel()
-                .equals("with_mask");
+                    .getLabel()
+                    .equals("with_mask");
             float score = output.get(supIndex).getScore();
 
             String message = String.valueOf(isMaskOn ?
@@ -144,8 +144,8 @@ public class MaskDetector extends Fragment {
             detectionTxtOutput.setTextColor(requireContext().getColor(color));
 
             int border = isMaskOn ?
-                R.drawable.with_mask_border :
-                R.drawable.without_mask_border;
+                    R.drawable.with_mask_border :
+                    R.drawable.without_mask_border;
             maskDetectorFrameLayout.setBackground(requireContext().getDrawable(border));
         }));
     }
