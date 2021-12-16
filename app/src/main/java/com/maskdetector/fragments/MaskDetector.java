@@ -118,39 +118,36 @@ public class MaskDetector extends Fragment {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setupMLOutput(Bitmap bitmap) {
         TensorImage tfImage = TensorImage.fromBitmap(bitmap);
         FaceMaskDetection.Outputs result = faceMaskDetection.process(tfImage);
         List<Category> output = result.getProbabilityAsCategoryList();
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                getViewLifecycleOwner().getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
-                    int supIndex = output.get(0).getScore() > output.get(1).getScore() ? 0 : 1;
+        new Handler(Looper.getMainLooper()).post(() -> getViewLifecycleOwner().getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
+            int supIndex = output.get(0).getScore() > output.get(1).getScore() ? 0 : 1;
 
-                    String label = output.get(supIndex).getLabel();
-                    float score = output.get(supIndex).getScore();
+            boolean isMaskOn = output.get(supIndex)
+                .getLabel()
+                .equals("with_mask");
+            float score = output.get(supIndex).getScore();
 
-                    detectionTxtOutput.setText(label + " - " + Double.valueOf(score*100).intValue() + "%" );
+            String message = String.valueOf(isMaskOn ?
+                    requireContext().getText(R.string.label_with_mask) :
+                    requireContext().getText(R.string.label_without_mask));
+            message += " - " + Double.valueOf(score*100).intValue() + "%";
+            detectionTxtOutput.setText(message);
 
-                    int color = label.equals("with_mask") ?
-                            R.color.blue_400 :
-                            R.color.red_600;
-                    detectionTxtOutput.setTextColor(requireContext().getColor(color));
-                    /*detectionPbOutput.setProgressTintList(AppCompatResources.getColorStateList(
-                        requireContext(),
-                        R.color.blue_400
-                    ));
-                    detectionPbOutput.setProgress(Double.valueOf(score*100).intValue());*/
+            int color = isMaskOn ?
+                    R.color.blue_400 :
+                    R.color.red_600;
+            detectionTxtOutput.setTextColor(requireContext().getColor(color));
 
-                    int border = label.equals("with_mask") ?
-                        R.drawable.with_mask_border :
-                        R.drawable.without_mask_border;
-                    maskDetectorFrameLayout.setBackground(requireContext().getDrawable(border));
-                });
-            }
-        });
+            int border = isMaskOn ?
+                R.drawable.with_mask_border :
+                R.drawable.without_mask_border;
+            maskDetectorFrameLayout.setBackground(requireContext().getDrawable(border));
+        }));
     }
 
     private void setupCameraThread() {
