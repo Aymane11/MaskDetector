@@ -78,7 +78,7 @@ public class MainAdapter extends ListAdapter<City, MainAdapter.MainViewHolder> {
             this.city = city;
 
             textTitle.setText(city.getCity_name());
-            textCount.setText(city.getCenters().size()+"");
+            textCount.setText(String.valueOf(city.getCenters().size()));
         }
     }
 

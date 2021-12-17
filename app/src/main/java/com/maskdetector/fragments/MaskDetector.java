@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.camera.core.AspectRatio;
@@ -29,7 +31,6 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleEventObserver;
@@ -47,6 +48,7 @@ import org.tensorflow.lite.support.model.Model;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -76,6 +78,9 @@ public class MaskDetector extends Fragment {
 
     private FaceMaskDetection faceMaskDetection;
 
+    private ActivityResultContracts.RequestMultiplePermissions requestMultiplePermissions;
+    private ActivityResultLauncher<String[]> multiplePermissionActivityResultLauncher;
+
     public MaskDetector() {
         // Required empty public constructor
     }
@@ -86,17 +91,19 @@ public class MaskDetector extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_mask_detector, container, false);
 
         setupViewAttributes(root);
+        setupActivityResult();
 
         setupML();
         setupCameraThread();
         setupCameraControllers();
-        if (!checkIfAllPermissionsGranted()) {
-            requireCameraPermission();
-        } else {
-            setupCamera();
-        }
+        requireCameraPermission();
 
         return root;
+    }
+
+    private void setupActivityResult() {
+        requestMultiplePermissions = new ActivityResultContracts.RequestMultiplePermissions();
+        multiplePermissionActivityResultLauncher = registerForActivityResult(requestMultiplePermissions, this::grantedCameraPermission);
     }
 
     private void setupViewAttributes(ViewGroup root) {
@@ -206,19 +213,28 @@ public class MaskDetector extends Fragment {
     }
 
     private void requireCameraPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+        if (!checkIfAllPermissionsGranted()) {
+            multiplePermissionActivityResultLauncher.launch(REQUIRED_PERMISSIONS);
+        } else {
+            setupCamera();
+        }
     }
 
-    private void grantedCameraPermission(Integer requestCode) {
-        if (requestCode.equals(REQUEST_CODE_PERMISSIONS)) {
-            if (checkIfAllPermissionsGranted()) {
-                setupCamera();
-            } else {
-                Snackbar snackbar = Snackbar.make(requireView(), "Permissions are not granted.", Snackbar.LENGTH_LONG);
-                snackbar.show();
-                Log.i(TAG, "Permissions are not granted");
-                requireActivity().finish();
-            }
+    private void grantedCameraPermission(Map<String, Boolean> isGranted) {
+        if (isGranted.containsValue(false)) {
+            Snackbar.make(
+                requireView(),
+                requireContext().getString(R.string.permissions_not_granted_snackbar),
+                Snackbar.LENGTH_LONG
+            )
+            .setAction(R.string.grant_permission_action, v -> {
+                requireCameraPermission();
+            })
+            .show();
+
+            Log.i(TAG, "Permissions are not granted.");
+        } else {
+            setupCamera();
         }
     }
 
@@ -254,7 +270,7 @@ public class MaskDetector extends Fragment {
 
     private Boolean checkIfAllPermissionsGranted() {
         for (String permission : REQUIRED_PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_DENIED) {
+            if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }
@@ -293,12 +309,6 @@ public class MaskDetector extends Fragment {
         }
 
         return AspectRatio.RATIO_16_9;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        grantedCameraPermission(requestCode);
     }
 
     private class BitmapOutputAnalysis implements ImageAnalysis.Analyzer {

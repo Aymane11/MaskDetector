@@ -8,4 +8,6 @@
     <string name="vaccine_centers_title">All the Centers</string>
     <string name="label_with_mask">Mask detected</string>
     <string name="label_without_mask">No mask detected</string>
+    <string name="grant_permission_action">Grant Now</string>
+    <string name="permissions_not_granted_snackbar">Allow permissions to test this functionality.</string>
 </resources>
